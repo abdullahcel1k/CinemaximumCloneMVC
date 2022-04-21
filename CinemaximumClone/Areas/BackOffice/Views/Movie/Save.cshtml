@@ -1,0 +1,120 @@
+﻿@model MovieCategoryCreateViewModel
+
+<div asp-validation-summary="All"
+     class="alert alert-danger"></div>
+<div class="row">
+    <form class="col-6" asp-action="SaveMovie">
+        <input asp-for="Movie.Id" hidden />
+        <div class="mb-3">
+            <label class="form-label">Film Adı</label>
+            <input type="text"
+                   class="form-control" asp-for="Movie.Name">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Film Açıklaması</label>
+            <textarea type="text"
+                      class="form-control" asp-for="Movie.Description"></textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Film Resmi</label>
+            <input type="text"
+                   class="form-control" asp-for="Movie.ImgUrl">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Vizyon Tarihi</label>
+            <input type="datetime"
+                   class="form-control" asp-for="Movie.VisionDate">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Süresi</label>
+            <input type="number"
+                   class="form-control" asp-for="Movie.Duration">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Film Yıldızı</label>
+            <input type="number"
+                   class="form-control" asp-for="Movie.StarRate">
+        </div>
+        @*<div class="mb-3">
+                <label class="form-label">Film Kategorisi</label>
+                <select class="form-control js-example-basic-multiple" asp-for="CategoryIds" multiple="multiple">
+                    @foreach (var cat in ViewBag.Categories)
+                    {
+                        <option value="@cat.Id">@cat.Name</option>
+                    }
+                </select>
+            </div>*@
+        <button type="submit" class="btn btn-primary">Filmi Kaydet</button>
+    </form>
+    <div class="col-6">
+        <form>
+            <input type="text" id="categoryName" />
+            <button type="button" class="btn btn-success" onclick="saveCategory()">
+                <span data-feather="plus"></span>
+            </button>
+        </form>
+        <ul class="list-group">
+            @*@{
+                if (Model.Categories != null)
+                {
+                    foreach (var category in Model.Categories)
+                    {
+                        <li class="list-group-item d-flex justify-content-between">
+                            @category.Name
+                            <button class="btn btn-danger">Sil</button>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li class="list-group-item d-flex justify-content-between">
+                        Henüz bir kategori eklemediniz
+                    </li>
+                }
+            }*@
+        </ul>
+    </div>
+</div>
+
+@section Scripts{ 
+    <script>
+        const getCategories = async () => {
+            await fetch('GetCategories').then(res => {
+                return res.json();
+            }).then(categories => {
+                let listHTML = ``;
+                categories.forEach(item => {
+                    listHTML += `<li class="list-group-item d-flex justify-content-between">
+                            ${item.name}
+                            <button class="btn btn-danger">Sil</button>
+                        </li>`;
+                });
+                console.log(listHTML);
+                const categoryListEl = document.querySelector(".list-group");
+                categoryListEl.innerHTML = listHTML;
+            });
+        }
+        const saveCategory = async () => {
+            var nameEl = document.querySelector("#categoryName");
+            try {
+                await fetch('SaveCategory', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        Name: nameEl.value
+                    }),
+                    headers: {
+                        'Accept': 'application/json',
+                        "Content-type": "application/json"
+                    },
+                });
+            } catch (ex) {
+                console.log(ex);
+            } finally {
+                nameEl.value = "";
+                getCategories();
+            }
+        }
+
+        getCategories();
+    </script>
+}
