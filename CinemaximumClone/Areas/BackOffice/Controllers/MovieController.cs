@@ -54,5 +54,13 @@ namespace CinemaximumClone.Areas.BackOffice.Controllers
             var categoryList = await _categoryService.GetList();
             return categoryList;
         }
+
+        [HttpDelete]
+        public async Task<bool> DeleteCategory(int id)
+        {
+            var isDeleted = await _categoryService.Delete(id);
+
+            return isDeleted;
+        }
     }
 }

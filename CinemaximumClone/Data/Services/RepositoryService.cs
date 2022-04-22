@@ -28,5 +28,24 @@ namespace CinemaximumClone.Data.Services
             await _context.SaveChangesAsync();
             return addedEntity.Entity;
         }
+
+        public async Task<T> GetById(int id)
+        {
+           var findedEntity = await _context.Set<T>().FindAsync(id);
+            return findedEntity;
+        }
+        public async Task<bool> Delete(int id)
+        {
+            try{
+                var deletedEntity = await GetById(id);
+                _context.Set<T>().Remove(deletedEntity);
+                _context.SaveChanges();
+            }catch(Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

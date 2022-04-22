@@ -86,7 +86,8 @@
                 categories.forEach(item => {
                     listHTML += `<li class="list-group-item d-flex justify-content-between">
                             ${item.name}
-                            <button class="btn btn-danger">Sil</button>
+                            <button class="btn btn-danger" onclick="deleteCategory(this)"
+                                    data-id="${item.id}">Sil</button>
                         </li>`;
                 });
                 console.log(listHTML);
@@ -108,12 +109,30 @@
                     },
                 });
             } catch (ex) {
-                console.log(ex);
+                console.error(ex);
             } finally {
                 nameEl.value = "";
                 getCategories();
             }
         }
+
+        const deleteCategory = async (categoryEl) => {
+            try {
+                await fetch('DeleteCategory/' + categoryEl.dataset.id, {
+                    method: 'DELETE',
+                })
+                .then(res => { return res.json() })
+                .then(isDeleted => {
+                        console.log(isDeleted);
+                    if (isDeleted) window.alert("Tebrikler kayıt başarılı bi şekile silindi.");
+                    else window.alert("Kayıt silinirken beklenmedik bir hata oluştu , lütfen sisteem yönetisine başvurun.");
+                });
+            } catch (ex) {
+                console.error(ex);
+            } finally {
+                categoryEl.parentNode.remove();
+            }
+        };
 
         getCategories();
     </script>

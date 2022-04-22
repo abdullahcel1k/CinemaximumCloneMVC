@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zYqwzCqzQWUoBpRuL9BnLkMRMOUmrjj2xRTDiR6A2hd2qZB+wuAvK0o8fG4kOqxjUS/g4FXwRO5aAzom24PNOw==",
+  "dgSpecHash": "JuuC9tm1xKR28SdmTdh9zZWLDf1OYrDH5VdBI1S5c8uiKgdsxPB+R6BlLyMJT19Lcm5pnxdr8RRhcl0o1MVcsg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\PC1411\\Documents\\BEMProjectes\\MVC-Courses\\CinemaximumCloneMVC-557ea62c0e8d8c3c138bfeeda59297cf1c658b4d\\CinemaximumClone\\CinemaximumClone.csproj",
+  "projectFilePath": "C:\\Users\\PC1411\\Documents\\BEMProjectes\\MVC-Courses\\CinemaximumCloneMVC\\CinemaximumClone\\CinemaximumClone.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\PC1411\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\PC1411\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

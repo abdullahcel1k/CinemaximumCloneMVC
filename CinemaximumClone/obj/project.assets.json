@@ -5766,11 +5766,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\PC1411\\Documents\\BEMProjectes\\MVC-Courses\\CinemaximumCloneMVC-557ea62c0e8d8c3c138bfeeda59297cf1c658b4d\\CinemaximumClone\\CinemaximumClone.csproj",
+      "projectUniqueName": "C:\\Users\\PC1411\\Documents\\BEMProjectes\\MVC-Courses\\CinemaximumCloneMVC\\CinemaximumClone\\CinemaximumClone.csproj",
       "projectName": "CinemaximumClone",
-      "projectPath": "C:\\Users\\PC1411\\Documents\\BEMProjectes\\MVC-Courses\\CinemaximumCloneMVC-557ea62c0e8d8c3c138bfeeda59297cf1c658b4d\\CinemaximumClone\\CinemaximumClone.csproj",
+      "projectPath": "C:\\Users\\PC1411\\Documents\\BEMProjectes\\MVC-Courses\\CinemaximumCloneMVC\\CinemaximumClone\\CinemaximumClone.csproj",
       "packagesPath": "C:\\Users\\PC1411\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\PC1411\\Documents\\BEMProjectes\\MVC-Courses\\CinemaximumCloneMVC-557ea62c0e8d8c3c138bfeeda59297cf1c658b4d\\CinemaximumClone\\obj\\",
+      "outputPath": "C:\\Users\\PC1411\\Documents\\BEMProjectes\\MVC-Courses\\CinemaximumCloneMVC\\CinemaximumClone\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\PC1411\\AppData\\Roaming\\NuGet\\NuGet.Config",
