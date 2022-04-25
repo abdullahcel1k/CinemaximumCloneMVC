@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CinemaximumClone.Data.Services
 {
-    public class RepositoryService<T> : IRepository<> where T : class
+    public class RepositoryService<T> : IRepository<T> where T : class
     {
         private readonly CinemaContext _context;
 
