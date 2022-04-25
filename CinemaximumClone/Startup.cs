@@ -1,17 +1,12 @@
 using CinemaximumClone.Data;
+using CinemaximumClone.Data.Repositories;
 using CinemaximumClone.Data.Services;
-using CinemaximumClone.Data.Services.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CinemaximumClone
 {
@@ -32,6 +27,7 @@ namespace CinemaximumClone
                 options.UseSqlServer(Configuration.GetConnectionString("CinemaximumCloneDb")));
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IMovieCategoryService, MovieCategoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +36,7 @@ namespace CinemaximumClone
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                DataSeeding.Seed(app);
             }
             else
             {

@@ -1,9 +1,7 @@
-﻿using CinemaximumClone.Data.Services.Repositories;
-using CinemaximumClone.Models;
+﻿using CinemaximumClone.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CinemaximumClone.Data.Services
@@ -32,16 +30,18 @@ namespace CinemaximumClone.Data.Services
 
         public async Task<T> GetById(int id)
         {
-           var findedEntity = await _context.Set<T>().FindAsync(id);
+            var findedEntity = await _context.Set<T>().FindAsync(id);
             return findedEntity;
         }
         public async Task<bool> Delete(int id)
         {
-            try{
+            try
+            {
                 var deletedEntity = await GetById(id);
                 _context.Set<T>().Remove(deletedEntity);
                 _context.SaveChanges();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return false;
             }

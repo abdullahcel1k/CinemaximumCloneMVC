@@ -1,12 +1,8 @@
-﻿using CinemaximumClone.Data;
-using CinemaximumClone.Data.Services;
-using CinemaximumClone.Data.Services.Repositories;
+﻿using CinemaximumClone.Data.Repositories;
 using CinemaximumClone.Models;
 using CinemaximumClone.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CinemaximumClone.Areas.BackOffice.Controllers
@@ -16,11 +12,13 @@ namespace CinemaximumClone.Areas.BackOffice.Controllers
     {
         private readonly IMovieService _movieService;
         private readonly ICategoryService _categoryService;
+        private readonly IMovieCategoryService _movieCategoryService;
 
-        public MovieController(ICategoryService categoryService, IMovieService movieService)
+        public MovieController(ICategoryService categoryService, IMovieService movieService, IMovieCategoryService movieCategoryService)
         {
             _categoryService = categoryService;
-            _movieService = movieService; 
+            _movieService = movieService;
+            _movieCategoryService = movieCategoryService;
         }
 
         public async Task<IActionResult> Index()
@@ -39,8 +37,24 @@ namespace CinemaximumClone.Areas.BackOffice.Controllers
         }
 
         [HttpPost]
-        public IActionResult Save(Movie movie)
+        public async Task<IActionResult> Save(Movie movie, List<int> categoryIds)
         {
+            var addedMovie = await _movieService.Add(movie);
+            for(var i = 0; i < categoryIds.Count; i++)
+            {
+                var newMoviewCategory = new MovieCategory();
+                newMoviewCategory.Movie = addedMovie;
+                newMoviewCategory.Category = await _categoryService.GetById(categoryIds[i]);
+                await _movieCategoryService.Add(newMoviewCategory);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _movieService.Delete(id);
+
             return RedirectToAction("Index");
         }
 

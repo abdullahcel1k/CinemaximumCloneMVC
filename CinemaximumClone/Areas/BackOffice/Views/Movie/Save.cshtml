@@ -3,7 +3,7 @@
 <div asp-validation-summary="All"
      class="alert alert-danger"></div>
 <div class="row">
-    <form class="col-6" asp-action="SaveMovie">
+    <form class="col-6" asp-action="Save">
         <input asp-for="Movie.Id" hidden />
         <div class="mb-3">
             <label class="form-label">Film Adı</label>
@@ -35,15 +35,15 @@
             <input type="number"
                    class="form-control" asp-for="Movie.StarRate">
         </div>
-        @*<div class="mb-3">
-                <label class="form-label">Film Kategorisi</label>
-                <select class="form-control js-example-basic-multiple" asp-for="CategoryIds" multiple="multiple">
-                    @foreach (var cat in ViewBag.Categories)
-                    {
-                        <option value="@cat.Id">@cat.Name</option>
-                    }
-                </select>
-            </div>*@
+        <div class="mb-3">
+            <label class="form-label">Film Kategorisi</label>
+            <select class="form-control categoryIds" name="categoryIds" multiple="multiple">
+                @foreach (var cat in Model.Categories)
+                {
+                    <option value="@cat.Id">@cat.Name</option>
+                }
+            </select>
+        </div>
         <button type="submit" class="btn btn-primary">Filmi Kaydet</button>
     </form>
     <div class="col-6">
@@ -55,28 +55,28 @@
         </form>
         <ul class="list-group">
             @*@{
-                if (Model.Categories != null)
-                {
-                    foreach (var category in Model.Categories)
+                    if (Model.Categories != null)
+                    {
+                        foreach (var category in Model.Categories)
+                        {
+                            <li class="list-group-item d-flex justify-content-between">
+                                @category.Name
+                                <button class="btn btn-danger">Sil</button>
+                            </li>
+                        }
+                    }
+                    else
                     {
                         <li class="list-group-item d-flex justify-content-between">
-                            @category.Name
-                            <button class="btn btn-danger">Sil</button>
+                            Henüz bir kategori eklemediniz
                         </li>
                     }
-                }
-                else
-                {
-                    <li class="list-group-item d-flex justify-content-between">
-                        Henüz bir kategori eklemediniz
-                    </li>
-                }
-            }*@
+                }*@
         </ul>
     </div>
 </div>
 
-@section Scripts{ 
+@section Scripts{
     <script>
         const getCategories = async () => {
             await fetch('GetCategories').then(res => {
@@ -85,10 +85,10 @@
                 let listHTML = ``;
                 categories.forEach(item => {
                     listHTML += `<li class="list-group-item d-flex justify-content-between">
-                            ${item.name}
-                            <button class="btn btn-danger" onclick="deleteCategory(this)"
-                                    data-id="${item.id}">Sil</button>
-                        </li>`;
+                                    ${item.name}
+                                    <button class="btn btn-danger" onclick="deleteCategory(this)"
+                                            data-id="${item.id}">Sil</button>
+                                </li>`;
                 });
                 console.log(listHTML);
                 const categoryListEl = document.querySelector(".list-group");
@@ -121,12 +121,12 @@
                 await fetch('DeleteCategory/' + categoryEl.dataset.id, {
                     method: 'DELETE',
                 })
-                .then(res => { return res.json() })
-                .then(isDeleted => {
+                    .then(res => { return res.json() })
+                    .then(isDeleted => {
                         console.log(isDeleted);
-                    if (isDeleted) window.alert("Tebrikler kayıt başarılı bi şekile silindi.");
-                    else window.alert("Kayıt silinirken beklenmedik bir hata oluştu , lütfen sisteem yönetisine başvurun.");
-                });
+                        if (isDeleted) window.alert("Tebrikler kayıt başarılı bi şekile silindi.");
+                        else window.alert("Kayıt silinirken beklenmedik bir hata oluştu , lütfen sisteem yönetisine başvurun.");
+                    });
             } catch (ex) {
                 console.error(ex);
             } finally {
@@ -135,5 +135,11 @@
         };
 
         getCategories();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.categoryIds').select2();
+        });
     </script>
 }

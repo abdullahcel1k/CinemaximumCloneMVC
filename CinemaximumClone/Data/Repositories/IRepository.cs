@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CinemaximumClone.Data.Services.Repositories
+namespace CinemaximumClone.Data.Repositories
 {
     public interface IRepository<T> where T : class
     {

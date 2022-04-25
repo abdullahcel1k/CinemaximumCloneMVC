@@ -5,10 +5,11 @@
         Yeni Film Ekle
     </a>
 </div>
-<div class="row">
+<div class="row p-3">
     @foreach (var item in Model)
     {
-        <div class="col-4 card">
+    <div class="col-4 px-3">
+        <div class="card">
             <img src="@item.ImgUrl" class="card-img-top"
                  alt="@item.Name" width="300" height="450">
             <div class="card-body">
@@ -24,7 +25,7 @@
                     Filmi Güncelle
                 </a>
                 <form asp-action="Delete"
-                      asp-route-id="@item.Id">
+                      asp-route-id="@item.Id" method="post">
                     <button class="btn btn-danger">
                         Filmi Sil
                     </button>
@@ -32,5 +33,6 @@
 
             </div>
         </div>
+    </div>
     }
 </div>
