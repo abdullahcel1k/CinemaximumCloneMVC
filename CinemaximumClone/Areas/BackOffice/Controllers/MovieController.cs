@@ -1,5 +1,6 @@
 ﻿using CinemaximumClone.Data;
 using CinemaximumClone.Data.Services;
+using CinemaximumClone.Data.Services.Repositories;
 using CinemaximumClone.Models;
 using CinemaximumClone.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,10 @@ namespace CinemaximumClone.Areas.BackOffice.Controllers
     [Area("BackOffice")]
     public class MovieController : Controller
     {
-        private readonly MovieService _movieService;
-        private readonly CategoryService _categoryService;
+        private readonly IMovieService _movieService;
+        private readonly ICategoryService _categoryService;
 
-        public MovieController(CategoryService categoryService, MovieService movieService)
+        public MovieController(ICategoryService categoryService, IMovieService movieService)
         {
             _categoryService = categoryService;
             _movieService = movieService; 

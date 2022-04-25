@@ -1,5 +1,6 @@
 using CinemaximumClone.Data;
 using CinemaximumClone.Data.Services;
+using CinemaximumClone.Data.Services.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,8 +30,8 @@ namespace CinemaximumClone
             services.AddControllersWithViews();
             services.AddDbContext<CinemaContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("CinemaximumCloneDb")));
-            services.AddScoped<MovieService>();
-            services.AddScoped<CategoryService>();
+            services.AddScoped<IMovieService, MovieService>();
+            services.AddScoped<ICategoryService, CategoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

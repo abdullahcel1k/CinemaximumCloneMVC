@@ -1,4 +1,5 @@
-﻿using CinemaximumClone.Models;
+﻿using CinemaximumClone.Data.Services.Repositories;
+using CinemaximumClone.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CinemaximumClone.Data.Services
 {
-    public class RepositoryService<T> where T : class
+    public class RepositoryService<T> : IRepository<> where T : class
     {
         private readonly CinemaContext _context;
 
