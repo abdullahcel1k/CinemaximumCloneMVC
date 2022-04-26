@@ -15,7 +15,8 @@
     <div class="col-6">
         <div class="d-flex justify-content-between align-items-center">
             <h3>Şehirler</h3>
-            <button class="btn btn-sm btn-success">Yeni Şehir Ekle</button>
+            <button class="btn btn-sm btn-success" 
+                    data-bs-toggle="modal" data-bs-target="#cityModal">Yeni Şehir Ekle</button>
         </div>
         <ul id="cityList" class="list-group mt-3">
         </ul>
@@ -164,9 +165,10 @@
             }
         };
 
+        // dışardan gönderilen form elamanını json'a çevirir
         const convertFormDataToJson = (formEl) => {
             const formData = new FormData(formEl);
-            const formJSON = JSON.stringify(Object.fromEntries(formData));
+            const formJSON = Object.fromEntries(formData);
             return formJSON;
         };
 
@@ -176,7 +178,7 @@
             try {
                 await fetch('/backoffice/cinema/savecinema', {
                     method: 'POST',
-                    body: cinemaFormJSON,
+                    body: JSON.stringify(cinemaFormJSON),
                     headers: {
                         'Accept': 'application/json',
                         "Content-type": "application/json"
@@ -197,7 +199,7 @@
             try {
                 await fetch('/backoffice/cinema/savecity', {
                     method: 'POST',
-                    body: cityFormJSON,
+                    body: JSON.stringify(cityFormJSON),
                     headers: {
                         'Accept': 'application/json',
                         "Content-type": "application/json"
@@ -206,7 +208,7 @@
             } catch (ex) {
                 console.error(ex);
             } finally {
-                cinemaFormEl.reset();
+                cityFormEl.reset();
                 document.querySelector(".btn-close").click();
                 getCities();
             }
