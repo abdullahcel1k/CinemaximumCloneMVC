@@ -1,0 +1,218 @@
+﻿@model CinemaIndexViewModel
+
+<div class="row">
+    <div class="col-6">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3>Sinemalar</h3>
+            <button class="btn btn-cs btn-success"
+                    data-bs-toggle="modal" data-bs-target="#cinemaModal">
+                Yeni Sinema Ekle
+            </button>
+        </div>
+        <ul id="cinemaList" class="list-group mt-3">
+        </ul>
+    </div>
+    <div class="col-6">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3>Şehirler</h3>
+            <button class="btn btn-sm btn-success">Yeni Şehir Ekle</button>
+        </div>
+        <ul id="cityList" class="list-group mt-3">
+        </ul>
+    </div>
+</div>
+
+<!-- Cinema Modal -->
+<div class="modal fade" id="cinemaModal" tabindex="-1"
+     aria-labelledby="cinemaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cinemaModal">Sinema Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="cinemaForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Sinema Adı</label>
+                        <input id="name" type="text"
+                               class="form-control" name="Name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Açıklama</label>
+                        <textarea id="name" class="form-control" name="Desciption"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Şehir</label>
+                        <select class="form-control" name="cityId">
+                            @foreach (var city in Model.Cities)
+                            {
+                                <option value="@city.Id">@city.Name</option>
+                            }
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="saveCinema()">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- City Modal -->
+<div class="modal fade" id="cityModal" tabindex="-1"
+     aria-labelledby="cityModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cityModal">Şehir Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="cityForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Şehir Adı</label>
+                        <input id="name" type="text"
+                               class="form-control" name="Name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Şehir Kodu</label>
+                        <input id="name" type="number"
+                               class="form-control" name="Code">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="saveCity()">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        const getCinemas = async () => {
+            await fetch('/backoffice/cinema/GetCinemas').then(res => {
+                return res.json();
+            }).then(cinemas => {
+                let listHTML = ``;
+                cinemas.forEach(cinema => {
+                    listHTML += `<li class="list-group-item d-flex justify-content-between">
+                                                ${cinema.name}
+                                                <button class="btn btn-danger" onclick="deleteCinema(this)"
+                                                        data-id="${cinema.id}">Sil</button>
+                                            </li>`;
+                });
+                console.log(listHTML);
+                const cinemaListEl = document.querySelector("#cinemaList");
+                cinemaListEl.innerHTML = listHTML;
+            });
+        };
+
+        const getCities = async () => {
+            await fetch('/backoffice/cinema/GetCities').then(res => {
+                return res.json();
+            }).then(cities => {
+                let listHTML = ``;
+                cities.forEach(city => {
+                    listHTML += `<li class="list-group-item d-flex justify-content-between">
+                                                ${city.name}
+                                                <button class="btn btn-danger" onclick="deleteCity(this)"
+                                                        data-id="${city.id}">Sil</button>
+                                            </li>`;
+                });
+                console.log(listHTML);
+                const cityListEl = document.querySelector("#cityList");
+                cityListEl.innerHTML = listHTML;
+            });
+        };
+
+        const deleteCinema = async (cinemaEl) => {
+            try {
+                await fetch('/backoffice/cinema/DeleteCinema/' + cinemaEl.dataset.id, {
+                    method: 'DELETE',
+                })
+                    .then(res => { return res.json() })
+                    .then(isDeleted => {
+                        if (isDeleted) window.alert("Tebrikler kayıt başarılı bi şekile silindi.");
+                        else window.alert("Kayıt silinirken beklenmedik bir hata oluştu , lütfen sisteem yönetisine başvurun.");
+                    });
+            } catch (ex) {
+                console.error(ex);
+            } finally {
+                cinemaEl.parentNode.remove();
+            }
+        };
+
+        const deleteCity = async (cityEl) => {
+            try {
+                await fetch('/backoffice/cinema/deletecity/' + cityEl.dataset.id, {
+                    method: 'DELETE',
+                })
+                    .then(res => { return res.json() })
+                    .then(isDeleted => {
+                        if (isDeleted) window.alert("Tebrikler kayıt başarılı bi şekile silindi.");
+                        else window.alert("Kayıt silinirken beklenmedik bir hata oluştu , lütfen sisteem yönetisine başvurun.");
+                    });
+            } catch (ex) {
+                console.error(ex);
+            } finally {
+                cityEl.parentNode.remove();
+            }
+        };
+
+        const convertFormDataToJson = (formEl) => {
+            const formData = new FormData(formEl);
+            const formJSON = JSON.stringify(Object.fromEntries(formData));
+            return formJSON;
+        };
+
+        const saveCinema = async () => {
+            const cinemaFormEl = document.querySelector("#cinemaForm");
+            const cinemaFormJSON = convertFormDataToJson(cinemaFormEl);
+            try {
+                await fetch('/backoffice/cinema/savecinema', {
+                    method: 'POST',
+                    body: cinemaFormJSON,
+                    headers: {
+                        'Accept': 'application/json',
+                        "Content-type": "application/json"
+                    },
+                });
+            } catch (ex) {
+                console.error(ex);
+            } finally {
+                cinemaFormEl.reset();
+                document.querySelector(".btn-close").click();
+                getCinemas();
+            }
+        };
+
+        const saveCity = async () => {
+            const cityFormEl = document.querySelector("#cityForm");
+            const cityFormJSON = convertFormDataToJson(cityFormEl);
+            try {
+                await fetch('/backoffice/cinema/savecity', {
+                    method: 'POST',
+                    body: cityFormJSON,
+                    headers: {
+                        'Accept': 'application/json',
+                        "Content-type": "application/json"
+                    },
+                });
+            } catch (ex) {
+                console.error(ex);
+            } finally {
+                cinemaFormEl.reset();
+                document.querySelector(".btn-close").click();
+                getCities();
+            }
+        }
+
+        getCinemas();
+        getCities();
+    </script>
+}
