@@ -22,15 +22,32 @@ namespace CinemaximumClone.Areas.BackOffice.Controllers
             _cityService = cityService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(List<int> city)
         {
-            CinemaIndexViewModel cinemaIndexViewModel = new CinemaIndexViewModel();
-            cinemaIndexViewModel.Cities = await _cityService.GetList();
-            return View(cinemaIndexViewModel);
+            ViewBag.Cities = await _cityService.GetList();
+            var cinemaTableList = new List<CinemasTableViewModel>(); ;
+            if (city.Count > 0)
+            {
+
+                cinemaTableList = await _cinemaService
+                                    .GetCinemaAndCities(x => city.Contains(x.City.Code) && !x.IsDelete);
+            }
+            else
+            {
+                cinemaTableList = await _cinemaService
+                                       .GetCinemaAndCities(x => !x.IsDelete);
+
+            }
+            return View(cinemaTableList);
+        }
+
+        public async Task<IActionResult> Detail(int id)
+        {
+            return View(await _cinemaService.GetById(id));
         }
 
         [HttpPost]
-        public async Task<Cinema> SaveCinema([FromBody]SaveCinemaViewModel saveCinema)
+        public async Task<Cinema> SaveCinema([FromBody] SaveCinemaViewModel saveCinema)
         {
             Cinema cinema = new Cinema();
             cinema.Name = saveCinema.Name;
@@ -40,7 +57,7 @@ namespace CinemaximumClone.Areas.BackOffice.Controllers
         }
 
         [HttpPost]
-        public async Task<City> SaveCity([FromBody]City city)
+        public async Task<City> SaveCity([FromBody] City city)
         {
             return await _cityService.Add(city);
         }

@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace CinemaximumClone.Data.Services
@@ -47,6 +49,11 @@ namespace CinemaximumClone.Data.Services
             }
 
             return true;
+        }
+
+        public async Task<List<T>> FindList(Expression<Func<T, bool>> predicate)
+        {
+            return await _context.Set<T>().Where(predicate).ToListAsync();
         }
     }
 }

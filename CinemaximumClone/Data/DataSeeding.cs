@@ -25,7 +25,7 @@ namespace CinemaximumClone.Data
                         new City(){ Name = "İstanbul", Code = 34 },
                         new City(){ Name = "Ankara", Code = 06 },
                         new City(){ Name = "Sivas", Code = 58 },
-                        new City(){ Name = "Antalya", Code = 06 },
+                        new City(){ Name = "Antalya", Code = 07 },
                         new City(){ Name = "Kayseri", Code = 38 },
                     }
                 );

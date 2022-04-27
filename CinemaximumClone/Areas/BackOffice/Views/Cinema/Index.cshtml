@@ -1,26 +1,55 @@
-﻿@model CinemaIndexViewModel
+﻿@model List<CinemasTableViewModel>
 
 <div class="row">
-    <div class="col-6">
-        <div class="d-flex justify-content-between align-items-center">
-            <h3>Sinemalar</h3>
-            <button class="btn btn-cs btn-success"
-                    data-bs-toggle="modal" data-bs-target="#cinemaModal">
-                Yeni Sinema Ekle
-            </button>
+    <div class="d-flex justify-content-between align-items-center">
+        <h3>Sinemalar</h3>
+        <div class="mb-3">
+            <label class="form-label">Film Kategorisi</label>
+            <select id="filteredCities" class="form-control" 
+                    name="cityIds" multiple="multiple" onchange="filteredCinemas(this)">
+                @foreach (var city in ViewBag.Cities)
+                {
+                    <option value="@city.Code">@city.Name</option>
+                }
+            </select>
         </div>
-        <ul id="cinemaList" class="list-group mt-3">
-        </ul>
+        <button class="btn btn-cs btn-success"
+                data-bs-toggle="modal" data-bs-target="#cinemaModal">
+            Yeni Sinema Ekle
+        </button>
     </div>
-    <div class="col-6">
-        <div class="d-flex justify-content-between align-items-center">
-            <h3>Şehirler</h3>
-            <button class="btn btn-sm btn-success" 
-                    data-bs-toggle="modal" data-bs-target="#cityModal">Yeni Şehir Ekle</button>
-        </div>
-        <ul id="cityList" class="list-group mt-3">
-        </ul>
-    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Sinema Adı</th>
+                <th scope="col">Şehir</th>
+                <th scope="col">Salon Sayısı</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody id="cinemaList">
+            @foreach (var cinema in Model)
+            {
+                <tr>
+                    <th scope="row">@cinema.Id</th>
+                    <td>@cinema.Name</td>
+                    <td>@cinema.CityName</td>
+                    <td>@cinema.HallCount</td>
+                    <td>
+                        <a asp-action="detail" asp-route-id="@cinema.Id" class="btn btn-info">
+                            <span data-feather="info"></span>
+                        </a>
+                        <button class="btn btn-danger" data-id="@cinema.Id" onclick="deleteCinema(this)">
+                            <span data-feather="trash-2"></span>
+                        </button>
+                    </td>
+                </tr>
+
+            }
+
+        </tbody>
+    </table>
 </div>
 
 <!-- Cinema Modal -->
@@ -46,7 +75,7 @@
                     <div class="mb-3">
                         <label class="form-label">Şehir</label>
                         <select class="form-control" name="cityId">
-                            @foreach (var city in Model.Cities)
+                            @foreach (var city in ViewBag.Cities)
                             {
                                 <option value="@city.Id">@city.Name</option>
                             }
@@ -62,36 +91,6 @@
     </div>
 </div>
 
-<!-- City Modal -->
-<div class="modal fade" id="cityModal" tabindex="-1"
-     aria-labelledby="cityModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="cityModal">Şehir Ekle</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="cityForm">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Şehir Adı</label>
-                        <input id="name" type="text"
-                               class="form-control" name="Name">
-                    </div>
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Şehir Kodu</label>
-                        <input id="name" type="number"
-                               class="form-control" name="Code">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-                <button type="button" class="btn btn-primary" onclick="saveCity()">Kaydet</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 @section Scripts{
     <script>
@@ -101,33 +100,24 @@
             }).then(cinemas => {
                 let listHTML = ``;
                 cinemas.forEach(cinema => {
-                    listHTML += `<li class="list-group-item d-flex justify-content-between">
-                                                ${cinema.name}
-                                                <button class="btn btn-danger" onclick="deleteCinema(this)"
-                                                        data-id="${cinema.id}">Sil</button>
-                                            </li>`;
+                    listHTML += `<tr>
+                        <th scope="row">${cinema.Id}</th>
+                        <td>${cinema.Name}</td>
+                        <td>${cinema.CityName}</td>
+                        <td>${cinema.HallCount}</td>
+                        <td>
+                            <button class="btn btn-info">
+                                <span data-feather="edit"></span>
+                            </button>
+                            <button class="btn btn-danger">
+                                <span data-feather="trash-2"></span>
+                            </button>
+                        </td>
+                    </tr>`;
                 });
                 console.log(listHTML);
                 const cinemaListEl = document.querySelector("#cinemaList");
                 cinemaListEl.innerHTML = listHTML;
-            });
-        };
-
-        const getCities = async () => {
-            await fetch('/backoffice/cinema/GetCities').then(res => {
-                return res.json();
-            }).then(cities => {
-                let listHTML = ``;
-                cities.forEach(city => {
-                    listHTML += `<li class="list-group-item d-flex justify-content-between">
-                                                ${city.name}
-                                                <button class="btn btn-danger" onclick="deleteCity(this)"
-                                                        data-id="${city.id}">Sil</button>
-                                            </li>`;
-                });
-                console.log(listHTML);
-                const cityListEl = document.querySelector("#cityList");
-                cityListEl.innerHTML = listHTML;
             });
         };
 
@@ -148,22 +138,6 @@
             }
         };
 
-        const deleteCity = async (cityEl) => {
-            try {
-                await fetch('/backoffice/cinema/deletecity/' + cityEl.dataset.id, {
-                    method: 'DELETE',
-                })
-                    .then(res => { return res.json() })
-                    .then(isDeleted => {
-                        if (isDeleted) window.alert("Tebrikler kayıt başarılı bi şekile silindi.");
-                        else window.alert("Kayıt silinirken beklenmedik bir hata oluştu , lütfen sisteem yönetisine başvurun.");
-                    });
-            } catch (ex) {
-                console.error(ex);
-            } finally {
-                cityEl.parentNode.remove();
-            }
-        };
 
         // dışardan gönderilen form elamanını json'a çevirir
         const convertFormDataToJson = (formEl) => {
@@ -193,28 +167,18 @@
             }
         };
 
-        const saveCity = async () => {
-            const cityFormEl = document.querySelector("#cityForm");
-            const cityFormJSON = convertFormDataToJson(cityFormEl);
-            try {
-                await fetch('/backoffice/cinema/savecity', {
-                    method: 'POST',
-                    body: JSON.stringify(cityFormJSON),
-                    headers: {
-                        'Accept': 'application/json',
-                        "Content-type": "application/json"
-                    },
-                });
-            } catch (ex) {
-                console.error(ex);
-            } finally {
-                cityFormEl.reset();
-                document.querySelector(".btn-close").click();
-                getCities();
-            }
+        const filteredCinemas = () => {
+            let selectedCities = $('#filteredCities').select2('data');
+            console.log(selectedCities);
         }
 
-        getCinemas();
-        getCities();
+        /*getCinemas();*/
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#filteredCities').select2();
+        });
     </script>
 }
