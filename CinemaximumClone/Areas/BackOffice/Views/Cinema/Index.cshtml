@@ -5,10 +5,20 @@
         <h3>Sinemalar</h3>
         <div class="mb-3">
             <label class="form-label">Film Kategorisi</label>
-            <select id="filteredCities" class="form-control" 
+            <select id="filteredCities" class="form-control"
                     name="cityIds" multiple="multiple" onchange="filteredCinemas(this)">
                 @foreach (var city in ViewBag.Cities)
                 {
+                    if (ViewBag.SelectedCities != null)
+                    {
+                        if (ViewBag.SelectedCities.Contains(city.Code))
+                        {
+                            <option value="@city.Code" selected>@city.Name</option>
+                            continue;
+                        }
+
+                    }
+
                     <option value="@city.Code">@city.Name</option>
                 }
             </select>
@@ -101,19 +111,19 @@
                 let listHTML = ``;
                 cinemas.forEach(cinema => {
                     listHTML += `<tr>
-                        <th scope="row">${cinema.Id}</th>
-                        <td>${cinema.Name}</td>
-                        <td>${cinema.CityName}</td>
-                        <td>${cinema.HallCount}</td>
-                        <td>
-                            <button class="btn btn-info">
-                                <span data-feather="edit"></span>
-                            </button>
-                            <button class="btn btn-danger">
-                                <span data-feather="trash-2"></span>
-                            </button>
-                        </td>
-                    </tr>`;
+                            <th scope="row">${cinema.Id}</th>
+                            <td>${cinema.Name}</td>
+                            <td>${cinema.CityName}</td>
+                            <td>${cinema.HallCount}</td>
+                            <td>
+                                <button class="btn btn-info">
+                                    <span data-feather="edit"></span>
+                                </button>
+                                <button class="btn btn-danger">
+                                    <span data-feather="trash-2"></span>
+                                </button>
+                            </td>
+                        </tr>`;
                 });
                 console.log(listHTML);
                 const cinemaListEl = document.querySelector("#cinemaList");
@@ -169,7 +179,14 @@
 
         const filteredCinemas = () => {
             let selectedCities = $('#filteredCities').select2('data');
-            console.log(selectedCities);
+
+            const url = new URL(window.location.origin + window.location.pathname);
+
+            selectedCities.forEach(city => {
+                url.searchParams.append("city", city.id)
+            });
+
+            window.location = url;
         }
 
         /*getCinemas();*/

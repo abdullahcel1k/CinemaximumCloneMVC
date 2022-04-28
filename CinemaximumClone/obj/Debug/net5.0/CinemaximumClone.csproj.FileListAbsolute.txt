@@ -235,3 +235,4 @@ C:\Users\PC1411\Documents\BEMProjectes\MVC-Courses\CinemaximumCloneMVC\Cinemaxim
 C:\Users\PC1411\Documents\BEMProjectes\MVC-Courses\CinemaximumCloneMVC\CinemaximumClone\bin\Debug\net5.0\FakeData.dll
 C:\Users\PC1411\Documents\BEMProjectes\MVC-Courses\CinemaximumCloneMVC\CinemaximumClone\obj\Debug\net5.0\Razor\Areas\BackOffice\Views\Cinema\Index.cshtml.g.cs
 C:\Users\PC1411\Documents\BEMProjectes\MVC-Courses\CinemaximumCloneMVC\CinemaximumClone\obj\Debug\net5.0\Razor\Areas\BackOffice\Views\Hall\Index.cshtml.g.cs
+C:\Users\PC1411\Documents\BEMProjectes\MVC-Courses\CinemaximumCloneMVC\CinemaximumClone\obj\Debug\net5.0\Razor\Areas\BackOffice\Views\Cinema\Detail.cshtml.g.cs

@@ -28,7 +28,7 @@ namespace CinemaximumClone.Areas.BackOffice.Controllers
             var cinemaTableList = new List<CinemasTableViewModel>(); ;
             if (city.Count > 0)
             {
-
+                ViewBag.SelectedCities = city;
                 cinemaTableList = await _cinemaService
                                     .GetCinemaAndCities(x => city.Contains(x.City.Code) && !x.IsDelete);
             }
