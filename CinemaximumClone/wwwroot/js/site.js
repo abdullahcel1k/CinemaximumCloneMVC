@@ -1,4 +1,6 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+﻿// dışardan gönderilen form elamanını json'a çevirir
+const convertFormDataToJson = (formEl) => {
+    const formData = new FormData(formEl);
+    const formJSON = Object.fromEntries(formData);
+    return formJSON;
+};

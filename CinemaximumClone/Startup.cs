@@ -30,6 +30,8 @@ namespace CinemaximumClone
             services.AddScoped<IMovieCategoryService, MovieCategoryService>();
             services.AddScoped<ICinemaService, CinemaService>();
             services.AddScoped<ICityService, CityService>();
+            services.AddScoped<IHallService, HallService>();
+            services.AddScoped<IChairService, ChairService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

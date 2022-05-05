@@ -1,32 +1,124 @@
 ﻿<div class="row">
     <div class="d-flex">
-        <button class="btn btn-success ms-auto">Salon Ekle</button>
+        <button class="btn btn-success ms-auto"
+                data-bs-toggle="modal" data-bs-target="#hallModal">
+            Salon Ekle
+        </button>
     </div>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th scope="col">#</th>
+                <th scope="col">Sinema</th>
                 <th scope="col">Salon Adı</th>
                 <th scope="col">Kapasite</th>
                 <th scope="col">Şehir</th>
                 <th scope="col"></th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Salon 1</td>
-                <td>50</td>
-                <td>50</td>
-                <td>
-                    <button class="btn btn-info">
-                        <span data-feather="edit"></span>
-                    </button>
-                    <button class="btn btn-danger">
-                        <span data-feather="trash-2"></span>
-                    </button>
-                </td>
-            </tr>
+        <tbody id="hallTableBody">
         </tbody>
     </table>
 </div>
+
+<!-- Salon Modal -->
+<div class="modal fade" id="hallModal" tabindex="-1"
+     aria-labelledby="hallModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="hallModal">Salon Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="hallForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Salon Adı</label>
+                        <input id="name" type="text"
+                               class="form-control" name="Name">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sinema</label>
+                        <select class="form-control" name="CinemaId">
+                            @foreach (var cinema in ViewBag.Cinemas)
+                            {
+                                <option value="@cinema.Id">@cinema.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Kapasite</label>
+                        <input id="name" type="number"
+                               class="form-control" name="Capacity">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="saveSalon()">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        const getHalls = async () => {
+            try {
+                await fetch('/backoffice/hall/gethalls')
+                    .then(res => res.json())
+                    .then(halls => {
+                        // salonlar tabloya eklencek
+                        const hallTableBodyEl = document.querySelector("#hallTableBody");
+                        let hallEls = '';
+                        halls.forEach(item => {
+                            hallEls += `<tr>
+                                <th scope="row">${item.id}</th>
+                                <td>${item.cinemaName}</td>
+                                <td>${item.name}</td>
+                                <td>${item.capacity}</td>
+                                <td>${item.cityName}</td>
+                                <td>
+                                <button class="btn btn-info">
+                                <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger">
+                                <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                            </tr>`;
+                        });
+                        hallTableBodyEl.innerHTML = hallEls;
+                    });
+            } catch (ex) {
+                console.error(ex);
+            } finally {
+                document.querySelector(".btn-close").click();
+            }
+        }
+
+        const saveSalon = async () => {
+            const salonFormEl = document.querySelector("#hallForm");
+            const hallFormJSON = convertFormDataToJson(salonFormEl);
+            try {
+                await fetch('/backoffice/hall/save', {
+                    method: 'POST',
+                    body: JSON.stringify(hallFormJSON),
+                    headers: {
+                        'Accept': 'application/json',
+                        "Content-type": "application/json"
+                    },
+                });
+            } catch (ex) {
+                console.error(ex);
+            } finally {
+                salonFormEl.reset();
+                document.querySelector(".btn-close").click();
+                getHalls();
+            }
+        }
+
+        getHalls();
+    </script>
+}

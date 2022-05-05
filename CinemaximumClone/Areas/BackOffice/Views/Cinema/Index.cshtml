@@ -48,10 +48,10 @@
                     <td>@cinema.HallCount</td>
                     <td>
                         <a asp-action="detail" asp-route-id="@cinema.Id" class="btn btn-info">
-                            <span data-feather="info"></span>
+                            <i class="fa fa-info"></i>
                         </a>
                         <button class="btn btn-danger" data-id="@cinema.Id" onclick="deleteCinema(this)">
-                            <span data-feather="trash-2"></span>
+                            <i class="fa fa-trash"></i>
                         </button>
                     </td>
                 </tr>
@@ -117,10 +117,10 @@
                             <td>${cinema.HallCount}</td>
                             <td>
                                 <button class="btn btn-info">
-                                    <span data-feather="edit"></span>
+                                    <i class="fa fa-edit"></i>
                                 </button>
                                 <button class="btn btn-danger">
-                                    <span data-feather="trash-2"></span>
+                                   <i class="fa fa-trash"></i>
                                 </button>
                             </td>
                         </tr>`;
@@ -146,14 +146,6 @@
             } finally {
                 cinemaEl.parentNode.remove();
             }
-        };
-
-
-        // dışardan gönderilen form elamanını json'a çevirir
-        const convertFormDataToJson = (formEl) => {
-            const formData = new FormData(formEl);
-            const formJSON = Object.fromEntries(formData);
-            return formJSON;
         };
 
         const saveCinema = async () => {
